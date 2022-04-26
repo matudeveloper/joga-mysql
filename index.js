@@ -14,24 +14,21 @@ app.engine('hbs', hbs.engine({
 }));
 // setup static public directory
 app.use(express.static('public'));
-
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-
-// import article route
+// import article and author route
 const articleRoutes = require('./routes/article');
-// to use article routes
+const authorsRoutes = require('./routes/author');
+// to use article and author routes
 app.use('/', articleRoutes);
 app.use('/article', articleRoutes);
+app.use('/author', authorsRoutes);
 
 
-// show articles on author page
-app.get('/author/:author_id', (req, res) => {
-@@ -69,7 +79,6 @@ app.get('/author/:author_id', (req, res) => {
-})
-})
+
+
 
 
 // app start point
