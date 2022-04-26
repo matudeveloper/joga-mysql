@@ -2,6 +2,7 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+
 // add template engine
 const hbs = require('express-handlebars');
 // setup template engine directory and files extensions
@@ -14,8 +15,10 @@ app.engine('hbs', hbs.engine({
 }));
 // setup static public directory
 app.use(express.static('public'));
+
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}));
+
 
 
 // import article and author route
@@ -25,7 +28,6 @@ const authorsRoutes = require('./routes/author');
 app.use('/', articleRoutes);
 app.use('/article', articleRoutes);
 app.use('/author', authorsRoutes);
-
 
 
 

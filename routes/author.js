@@ -2,11 +2,10 @@ const express = require('express');
 // get using express router
 const router = express.Router();
 // define article controller and export it for this file
-const articleController =require('../controllers/article');
+const authorsController = require('../controllers/author');
 
 // use controller functions according to the route
-router.get('/', articleController.getAllArticles);
-router.get('/article/:slug', articleController.getArticleBySlug);
+router.get('/:author_id', authorsController.getAuthorsById);
 
 // export article router for using in default application file
 module.exports = router;
