@@ -14,57 +14,27 @@ app.engine('hbs', hbs.engine({
 }));
 // setup static public directory
 app.use(express.static('public'));
-const mysql = require('mysql');
+
 const bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({extended: true}));
-// create database connection
-let con = mysql.createConnection ({
-    host: "localhost",
-    user: "root",
-    password: "qwerty",
-    database: "joga_mysql"
-});
-con.connect(function(err) {
-    if(err) throw err;
-    console.log('Connected to joga_mysql db')
-});
-// show all articles - index page
-app.get('/', (req, res) => {
-    let query = "SELECT * FROM article";
-    let articles = []
-    con.query(query, (err, result) => {
-        if (err) throw err;
-        articles = result
-        res.render('index', {articles: articles})
-    })
-})
 
-// show articles by this slug
-app.get('/article/:slug', (req, res) => {
-    let query = `SELECT article.slug, article.name, article.image, article.body, article.published, author.names, author.id AS author_id FROM article INNER JOIN author ON article.author_id=author.id WHERE slug="${req.params.slug}"`
-    let article;
-    con.query(query, (err, result) => {
-        if(err) throw err;
-    @@ -56,6 +56,21 @@ app.get('/article/:slug', (req, res) => {
-    });
-    })
+
+
+// import article route
+const articleRoutes = require('./routes/article');
+// to use article routes
+app.use('/', articleRoutes);
+app.use('/article', articleRoutes);
+
 
 // show articles on author page
-    app.get('/author/:author_id', (req, res) => {
-        let query = `SELECT article.slug, article.name, article.image, article.body, article.published, author.names, author.id AS author_id FROM article INNER JOIN author ON article.author_id=author.id WHERE author_id="${req.params.author_id}"`;
-        let articles = [];
-        let author;
-        con.query(query, (err, result) => {
-            if(err) throw err;
-            articles = result;
-            author = result[0];
-            res.render('author', {articles: articles, author: author})
-        })
-    })
+app.get('/author/:author_id', (req, res) => {
+@@ -69,7 +79,6 @@ app.get('/author/:author_id', (req, res) => {
+})
+})
 
-//WHERE id="${req.params.id}
 
 // app start point
-    app.listen (3000, () => {
-        console.log('App is started at http://localhost:3000');
-    });
+app.listen (3000, () => {
+    console.log('App is started at http://localhost:3000');
+});
